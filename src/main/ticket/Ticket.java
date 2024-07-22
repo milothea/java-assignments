@@ -8,7 +8,7 @@ public class Ticket {
     private final int id;
     private String concertHall = DefaultValues.EVENT_VENUE;
     private int eventCode = DefaultValues.EVENT_CODE;
-    private LocalDateTime startTime = null;
+    private LocalDateTime startTime;
     private boolean isPromo = DefaultValues.IS_PROMO;
     private char stadiumSector = DefaultValues.STADIUM_SECTOR;
     private int maxBackpackWeight = DefaultValues.MAX_BACKPACK_WEIGHT;
