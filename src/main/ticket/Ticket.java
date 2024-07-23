@@ -1,7 +1,8 @@
 package main.ticket;
 
-import java.time.LocalDateTime;
 import main.constants.DefaultValues;
+
+import java.time.LocalDateTime;
 
 public class Ticket {
     private static int ticketsCounter = 0;
@@ -72,9 +73,11 @@ public class Ticket {
     public double getTicketPrice() {
         return this.ticketPrice;
     }
+
     private static int getTicketsCounter() {
         return ticketsCounter;
     }
+
     public void setTicketsCounter(int value) {
         this.ticketsCounter = value;
     }
