@@ -1,43 +1,53 @@
 package main.ticketService;
 
-import main.ticket.Ticket;
-import main.constants.Sectors;
-import java.util.Arrays;
+import main.models.Ticket;
+import main.models.Price;
+
+import java.util.ArrayList;
 import java.time.LocalDateTime;
 
 public class TicketService {
+    ArrayList<Ticket> soldTickets = new ArrayList<>();
     public TicketService() {}
 
     public Ticket buyTicket() {
-        return new Ticket();
+        Ticket newTicket = new Ticket();
+
+        this.addTicketToSoldTickets(newTicket);
+
+        return newTicket;
     }
 
     public Ticket buyTicket(String concertHall, int eventCode, LocalDateTime startTime) {
-        return new Ticket(concertHall, eventCode, startTime);
+        Ticket newTicket = new Ticket(concertHall, eventCode, startTime);
+
+        this.addTicketToSoldTickets(newTicket);
+
+        return newTicket;
     }
 
-    public Ticket buyTicket(String concertHall, int eventCode, LocalDateTime startTime, boolean isPromo, char stadiumSector, int maxBackpackWeight, double ticketPrice) {
-        if (!this.validateSector(stadiumSector)) {
-            throw new IllegalArgumentException("Invalid stadium sector: " + stadiumSector + ". Please provide a valid sector from the list " + Arrays.toString(Sectors.values()));
-        }
+    public Ticket buyTicket(String concertHall, int eventCode, LocalDateTime startTime, boolean isPromo, char stadiumSector, int maxBackpackWeight, Price ticketPrice) {
 
-        if (concertHall.length() > 10) {
-            throw new IllegalArgumentException("Concert hall name '" + concertHall + "' is too long. Please provide a name with 10 characters or less.");
-        }
+        Ticket newTicket = new Ticket(concertHall, eventCode, startTime, isPromo, stadiumSector, maxBackpackWeight, ticketPrice);
 
-        if (Integer.toString(eventCode).length() > 3) {
-            throw new IllegalArgumentException("Event code '" + eventCode + "' is too long. Please provide an event code containing up to 3 digits.");
-        }
+        this.addTicketToSoldTickets(newTicket);
 
-
-
-        return new Ticket(concertHall, eventCode, startTime, isPromo, stadiumSector, maxBackpackWeight, ticketPrice);
+        return newTicket;
     }
 
-    private boolean validateSector (char sector) {
-        char[] validSectors = Sectors.values();
+    public Ticket getTicketById(int id) {
+        for (Ticket ticket : this.soldTickets) {
+            if (ticket.getId() == id) {
+                return ticket;
+            }
+        }
 
-        return Arrays.binarySearch(validSectors, sector) >= 0;
+        System.out.println("Ticket with ID " + id + " not found.");
+        return null;
+    }
+
+    private void addTicketToSoldTickets(Ticket ticket) {
+        this.soldTickets.add(ticket);
     }
 
     private String parseDateToString(LocalDateTime date) {
