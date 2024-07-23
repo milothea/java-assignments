@@ -25,8 +25,8 @@ public class TicketService {
             throw new IllegalArgumentException("Concert hall name '" + concertHall + "' is too long. Please provide a name with 10 characters or less.");
         }
 
-        if (Integer.toString(eventCode).length() > 3) {
-            throw new IllegalArgumentException("Event code '" + eventCode + "' is too long. Please provide an event code containing up to 3 digits.");
+        if (Integer.toString(eventCode).length() != 3) {
+            throw new IllegalArgumentException("Event code '" + eventCode + "' is incorrect. Please provide an event code containing exactly 3 digits.");
         }
 
 
