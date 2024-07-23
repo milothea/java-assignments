@@ -77,4 +77,18 @@ public class TicketService {
         System.out.println("Date of ticket purchase: " + this.parseDateToString(orderDate) + ". Price: " + ticket.getTicketPrice() + promoInfo);
         System.out.println("-------------------------------");
     }
+
+    public void printTicketById(int id) {
+        Ticket ticket = this.getTicketById(id);
+
+        if (ticket != null) {
+            this.printTicket(ticket);
+        }
+    }
+
+    public void printTickets() {
+        for (Ticket ticket : this.soldTickets) {
+            this.printTicket(ticket);
+        }
+    }
 }
