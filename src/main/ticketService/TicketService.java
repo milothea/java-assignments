@@ -65,7 +65,7 @@ public class TicketService {
                 parsedMinutes;
     }
 
-    public void printTicket(Ticket ticket) {
+    private void printTicket(Ticket ticket) {
         LocalDateTime startTime = ticket.getStartTime();
         LocalDateTime orderDate = ticket.getOrderDate();
         String promoInfo = ticket.getIsPromo() ? " (promo ticket)" : "";
@@ -74,7 +74,7 @@ public class TicketService {
         System.out.println("Venue:  " + ticket.getConcertHall() + ". Sector: " + ticket.getStadiumSector());
         System.out.println("Start time: " + this.parseDateToString(startTime));
         System.out.println("Maximum allowed backpack weight: " + ticket.getMaxBackpackWeight() + "g");
-        System.out.println("Date of ticket purchase: " + this.parseDateToString(orderDate) + ". Price: " + ticket.getTicketPrice() + promoInfo);
+        System.out.println("Date of ticket purchase: " + this.parseDateToString(orderDate) + ". Price: " + ticket.getTicketPrice().getAmount() + promoInfo);
         System.out.println("-------------------------------");
     }
 
