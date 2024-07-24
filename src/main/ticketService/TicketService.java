@@ -2,18 +2,29 @@ package main.ticketService;
 
 import main.ticket.Ticket;
 import main.constants.Sectors;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.time.LocalDateTime;
 
 public class TicketService {
+    ArrayList<Ticket> soldTickets = new ArrayList<>();
     public TicketService() {}
 
     public Ticket buyTicket() {
-        return new Ticket();
+        Ticket newTicket = new Ticket();
+
+        this.addTicketToSoldTickets(newTicket);
+
+        return newTicket;
     }
 
     public Ticket buyTicket(String concertHall, int eventCode, LocalDateTime startTime) {
-        return new Ticket(concertHall, eventCode, startTime);
+        Ticket newTicket = new Ticket(concertHall, eventCode, startTime);
+
+        this.addTicketToSoldTickets(newTicket);
+
+        return newTicket;
     }
 
     public Ticket buyTicket(String concertHall, int eventCode, LocalDateTime startTime, boolean isPromo, char stadiumSector, int maxBackpackWeight, double ticketPrice) {
@@ -31,8 +42,24 @@ public class TicketService {
 
 
 
-        return new Ticket(concertHall, eventCode, startTime, isPromo, stadiumSector, maxBackpackWeight, ticketPrice);
+        Ticket newTicket = new Ticket(concertHall, eventCode, startTime, isPromo, stadiumSector, maxBackpackWeight, ticketPrice);
+
+        this.addTicketToSoldTickets(newTicket);
+
+        return newTicket;
     }
+
+    private void addTicketToSoldTickets(Ticket ticket) {this.soldTickets.add(ticket);}
+
+    public Ticket getTicketBySector(char stadiumSector) {
+        for (Ticket ticket : this.soldTickets) {
+            if (ticket.getStadiumSector() == stadiumSector) return ticket;
+        }
+
+        System.out.println("Ticket with ID " + stadiumSector + " not found.");
+        return null;
+    }
+
 
     private boolean validateSector (char sector) {
         char[] validSectors = Sectors.values();
