@@ -1,4 +1,4 @@
-package main.ticket;
+package main.models;
 
 import main.constants.DefaultValues;
 
@@ -13,7 +13,7 @@ public class Ticket {
     private boolean isPromo = DefaultValues.IS_PROMO;
     private char stadiumSector = DefaultValues.STADIUM_SECTOR;
     private int maxBackpackWeight = DefaultValues.MAX_BACKPACK_WEIGHT;
-    private double ticketPrice = DefaultValues.TICKET_PRICE;
+    private Price ticketPrice = new Price(DefaultValues.TICKET_PRICE);
 
     private final LocalDateTime orderDate;
 
@@ -30,7 +30,7 @@ public class Ticket {
         this.startTime = startTime;
     }
 
-    public Ticket(String concertHall, int eventCode, LocalDateTime startTime, boolean isPromo, char stadiumSector, int maxBackpackWeight, double ticketPrice) {
+    public Ticket(String concertHall, int eventCode, LocalDateTime startTime, boolean isPromo, char stadiumSector, int maxBackpackWeight, Price ticketPrice) {
         this(concertHall, eventCode, startTime);
         this.isPromo = isPromo;
         this.stadiumSector = stadiumSector;
@@ -70,7 +70,7 @@ public class Ticket {
         return this.orderDate;
     }
 
-    public double getTicketPrice() {
+    public Price getTicketPrice() {
         return this.ticketPrice;
     }
 
