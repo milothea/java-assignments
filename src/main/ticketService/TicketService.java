@@ -3,17 +3,28 @@ package main.ticketService;
 import main.ticket.Ticket;
 import main.constants.Sectors;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.time.LocalDateTime;
 
 public class TicketService {
+    private final ArrayList<Ticket> soldTickets = new ArrayList<>();
+
     public TicketService() {}
 
     public Ticket buyTicket() {
-        return new Ticket();
+        Ticket newTicket = new Ticket();
+
+        this.addToSoldTicket(newTicket);
+
+        return newTicket;
     }
 
     public Ticket buyTicket(String concertHall, int eventCode, LocalDateTime startTime) {
-        return new Ticket(concertHall, eventCode, startTime);
+        Ticket newTicket = new Ticket(concertHall, eventCode, startTime);
+
+        this.addToSoldTicket(newTicket);
+
+        return newTicket;
     }
 
     public Ticket buyTicket(String concertHall, int eventCode, LocalDateTime startTime, boolean isPromo, char stadiumSector, int maxBackpackWeight, double ticketPrice) {
@@ -29,9 +40,11 @@ public class TicketService {
             throw new IllegalArgumentException("Event code '" + eventCode + "' is incorrect. Please provide an event code containing exactly 3 digits.");
         }
 
+        Ticket newTicket = new Ticket(concertHall, eventCode, startTime, isPromo, stadiumSector, maxBackpackWeight, ticketPrice);
 
+        this.addToSoldTicket(newTicket);
 
-        return new Ticket(concertHall, eventCode, startTime, isPromo, stadiumSector, maxBackpackWeight, ticketPrice);
+        return newTicket;
     }
 
     private boolean validateSector (char sector) {
@@ -66,5 +79,31 @@ public class TicketService {
         System.out.println("Maximum allowed backpack weight: " + ticket.getMaxBackpackWeight() + "g");
         System.out.println("Date of ticket purchase: " + this.parseDateToString(orderDate) + ". Price: " + ticket.getTicketPrice() + promoInfo);
         System.out.println("-------------------------------");
+    }
+
+    public ArrayList<Ticket> getTicketsBySector(char sector) {
+        ArrayList<Ticket> ticketsBySector = new ArrayList<>();
+
+        for(Ticket ticket : this.soldTickets) {
+            if (ticket.getStadiumSector() == sector) {
+                ticketsBySector.add(ticket);
+            }
+        }
+
+        return ticketsBySector;
+    }
+
+    public void printListOfTickets(ArrayList<Ticket> tickets) {
+        if (tickets.size() == 0) {
+            System.out.println("No tickets found.");
+        } else {
+            for (Ticket ticket : tickets) {
+                this.printTicket(ticket);
+            }
+        }
+    }
+
+    private void addToSoldTicket(Ticket ticket) {
+        this.soldTickets.add(ticket);
     }
 }
