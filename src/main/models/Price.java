@@ -1,13 +1,15 @@
 package main.models;
 
-public class Price {
-    private final double amount;
+import java.math.BigDecimal;
 
-    public Price(double amount) {
+public class Price {
+    private final BigDecimal amount;
+
+    public Price(BigDecimal amount) {
         this.amount = amount;
     }
 
-    public double getAmount() {
+    public BigDecimal getAmount() {
         return this.amount;
     }
 }

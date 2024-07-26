@@ -1,10 +1,8 @@
 package main.models;
 
-import main.constants.Sectors;
 import main.constants.DefaultValues;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 
 public class Ticket {
     private static int ticketsCounter = 0;
@@ -20,18 +18,6 @@ public class Ticket {
     private final LocalDateTime orderDate;
 
     public Ticket() {
-        if (!this.validateSector(stadiumSector)) {
-            throw new IllegalArgumentException("Invalid stadium sector: " + stadiumSector + ". Please provide a valid sector from the list " + Arrays.toString(Sectors.values()));
-        }
-
-        if (concertHall.length() > 10) {
-            throw new IllegalArgumentException("Concert hall name '" + concertHall + "' is too long. Please provide a name with 10 characters or less.");
-        }
-
-        if (Integer.toString(eventCode).length() != 3) {
-            throw new IllegalArgumentException("Event code '" + eventCode + "' is incorrect. Please provide an event code containing exactly 3 digits.");
-        }
-
         this.setTicketsCounter(getTicketsCounter() + 1);
         this.id = getTicketsCounter();
         this.orderDate = LocalDateTime.now();
@@ -50,12 +36,6 @@ public class Ticket {
         this.stadiumSector = stadiumSector;
         this.maxBackpackWeight = maxBackpackWeight;
         this.ticketPrice = ticketPrice;
-    }
-
-    private boolean validateSector (char sector) {
-        char[] validSectors = Sectors.values();
-
-        return Arrays.binarySearch(validSectors, sector) >= 0;
     }
 
     public int getId() {
