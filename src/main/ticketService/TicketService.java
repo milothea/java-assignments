@@ -2,12 +2,14 @@ package main.ticketService;
 
 import main.models.Ticket;
 import main.models.Price;
+import main.constants.Sectors;
 
 import java.util.ArrayList;
 import java.time.LocalDateTime;
 
 public class TicketService {
     ArrayList<Ticket> soldTickets = new ArrayList<>();
+
     public TicketService() {}
 
     public Ticket buyTicket() {
@@ -89,6 +91,28 @@ public class TicketService {
     public void printTickets() {
         for (Ticket ticket : this.soldTickets) {
             this.printTicket(ticket);
+        }
+    }
+
+    public ArrayList<Ticket> getTicketsBySector(char sector) {
+        ArrayList<Ticket> ticketsBySector = new ArrayList<>();
+
+        for(Ticket ticket : this.soldTickets) {
+            if (ticket.getStadiumSector() == sector) {
+                ticketsBySector.add(ticket);
+            }
+        }
+
+        return ticketsBySector;
+    }
+
+    public void printListOfTickets(ArrayList<Ticket> tickets) {
+        if (tickets.size() == 0) {
+            System.out.println("No tickets found.");
+        } else {
+            for (Ticket ticket : tickets) {
+                this.printTicket(ticket);
+            }
         }
     }
 }
