@@ -1,10 +1,14 @@
 package main;
 
 import main.constants.Sectors;
-import main.constants.SeparatorMessage;
+import main.models.MuseumTicket;
 import main.models.Price;
+import main.models.FootballTicket;
 import main.models.Ticket;
-import main.service.TicketService;
+import main.models.Admin;
+import main.models.Client;
+import main.service.FootballTicketService;
+import main.service.MuseumTicketService;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -12,69 +16,70 @@ import java.time.LocalDateTime;
 
 public class MyApp {
     public static void main(String[] args) {
-        TicketService ticketService = new TicketService();
-        ArrayList<Ticket> soldTickets = new ArrayList<>();
+        FootballTicketService footballTicketService = new FootballTicketService();
+        MuseumTicketService museumTicketService = new MuseumTicketService();
+        ArrayList<Ticket> soldFootballTickets = new ArrayList<>();
+        ArrayList<Ticket> soldMuseumTickets = new ArrayList<>();
         LocalDateTime startTime = LocalDateTime.of(2024, 10, 1, 19, 30);
-        String[] concertHalls = {"Concert hall", "Nightclub", "Stadium"};
+        String[] stadiums = {"PGE", "Dinamo", "Stadium"};
+        String[] museums = {"Louvre", "POLIN", "Hermitage"};
+        String[] exhibitions = {"Mona Lisa", "History of Poland", "The Winter Palace"};
         int[] maxWeights = {1000, 2100, 3500};
         int[] eventCodes = {123, 456, 789};
-        int optionsNumber = concertHalls.length;
+        int optionsNumber = stadiums.length;
         char[] sectors = Sectors.values();
+        Admin admin = new Admin();
+        Client client = new Client();
+
+        admin.printRole();
+        client.printRole();
 
         try {
             for (int i = 0; i < 10; i++) {
                 int randomIdx = (int) (Math.random() * optionsNumber);
-                String concertHall = concertHalls[randomIdx];
+                String stadium = stadiums[randomIdx];
                 int eventCode = eventCodes[randomIdx];
-                Ticket ticket;
+                String museum = museums[randomIdx];
+                FootballTicket footballTicket;
+                MuseumTicket museumTicket;
 
                 if (i == 0) {
-                    ticket = ticketService.buyTicket();
+                    footballTicket = footballTicketService.buyTicket();
+                    museumTicket = museumTicketService.buyTicket();
                 } else if (i % 2 == 0) {
-                    ticket = ticketService.buyTicket(concertHall, eventCode, startTime);
+                    footballTicket = footballTicketService.buyTicket(stadium, eventCode, startTime);
+                    museumTicket = museumTicketService.buyTicket(museum, eventCode, startTime);
+
+                    footballTicket.shared(123456789);
                 } else {
                     boolean isPromo = randomIdx % 2 == 0;
                     int maxWeight = maxWeights[randomIdx];
                     char sector = sectors[randomIdx];
+                    String exhibition = exhibitions[randomIdx];
                     BigDecimal priceAmount = new BigDecimal(7.50 + optionsNumber);
 
-                    ticket = ticketService.buyTicket(concertHall, eventCode, startTime, isPromo, sector,
+                    footballTicket = footballTicketService.buyTicket(stadium, eventCode, startTime, isPromo, sector,
                             maxWeight, new Price(priceAmount));
+                    museumTicket = museumTicketService.buyTicket(museum, eventCode, startTime, isPromo, new Price(priceAmount), exhibition);
+
+                    footballTicket.shared("test@test.test");
                 }
 
-                soldTickets.add(ticket);
+                soldFootballTickets.add(footballTicket);
+                soldMuseumTickets.add(museumTicket);
             }
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
 
+        footballTicketService.printTickets(soldFootballTickets);
+        museumTicketService.printTickets(soldMuseumTickets);
+
         try {
-            ArrayList<Ticket> ticketsA= ticketService.getTicketsBySector(Sectors.A, soldTickets);
-            ArrayList<Ticket> ticketsB= ticketService.getTicketsBySector(Sectors.B, soldTickets);
-            ArrayList<Ticket> ticketsC= ticketService.getTicketsBySector(Sectors.C, soldTickets);
+            Ticket ticket = footballTicketService.getTicketById(3, soldFootballTickets);
 
-            System.out.println(SeparatorMessage.getSeparator());
-            System.out.println("Tickets by sector A");
-            System.out.println(SeparatorMessage.getSeparator());
-            ticketService.printListOfTickets(ticketsA);
-            System.out.println("Tickets by sector B");
-            System.out.println(SeparatorMessage.getSeparator());
-            ticketService.printListOfTickets(ticketsB);
-            System.out.println("Tickets by sector C");
-            System.out.println(SeparatorMessage.getSeparator());
-            ticketService.printListOfTickets(ticketsC);
-            System.out.println(SeparatorMessage.getSeparator());
-
-            Ticket ticketOne = ticketService.getTicketById(1, soldTickets);
-            Ticket ticketThree = ticketService.getTicketById(3, soldTickets);
-            Ticket ticketFive = ticketService.getTicketById(5, soldTickets);
-
-            System.out.println("Print tickets by ID - 1, 3, 5");
-            System.out.println(SeparatorMessage.getSeparator());
-
-            ticketService.printTicket(ticketOne);
-            ticketService.printTicket(ticketThree);
-            ticketService.printTicket(ticketFive);
+            admin.checkTicket(ticket, soldFootballTickets);
+            client.getTicket();
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
